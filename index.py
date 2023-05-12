@@ -16,39 +16,7 @@ from io import BytesIO
 import openai
 import pdfplumber
 import requests
-
-
-def get_author_affiliation(pdf_url):
-    """
-    从 PDF 文件中提取作者单位信息
-    """
-    response = requests.get(pdf_url)
-    pdf_content = BytesIO(response.content)
-    author_affiliation = []
-
-    with pdfplumber.open(pdf_content) as pdf:
-        first_page = pdf.pages[0]
-        text = first_page.extract_text()
-
-        # 设置提示词
-        prompt = 'Extract the organization names from the given text: ' + text
-
-        # 调用 GPT-3.5 的接口
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a very powerful named entity recognition model."},
-                {"role": "user", "content": prompt}
-            ],
-        )
-
-        output = response.choices[0].message.content.strip()
-        institutions = [o.strip() for o in output.split("\n")]
-
-        author_affiliation = list(set(institutions))
-
-    return author_affiliation
-
+from getAffiliation import *
 
 def get_yesterday():
     """
@@ -93,7 +61,7 @@ def search_arxiv_papers(search_term, yester_date, max_results=10):
         pdf_url = pdf_url.replace("abs", "pdf")
 
         # 获取作者单位
-        author_affiliation = get_author_affiliation(pdf_url)
+        author_affiliation = get_affiliation_by_openai(pdf_url)
 
         if pub_date == yester_date:
             papers.append({
@@ -120,9 +88,6 @@ def send_wechat_message(title, content, SERVERCHAN_API_KEY):
 
 # def handler(event, context):
 if __name__ == '__main__':
-    # 设置 OPENAI 的 API_KEY
-    os.environ['OPENAI_API_KEY'] = 'your_openai_api_key'
-    openai.api_key = os.getenv('OPENAI_API_KEY')
     # 修改为自己 Serve 酱 API
     SERVERCHAN_API_KEY = 'SCT206421TeQFPxkyqpZQFegFELJaKCW6d'
     # 关键词
