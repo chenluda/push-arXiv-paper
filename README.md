@@ -54,7 +54,6 @@
 * 进入服务及函数模块，点击创建服务按钮；
 ![image](https://github.com/chenluda/push-arXiv-paper/assets/45784833/7f93da1e-28be-4631-86cd-3fa366ae9a74)
 
-登陆后，进入管理控制台，再进入服务及函数模块，点击创建服务按钮
 * 将弹窗中的名称和描述填完后，点击左下角确定按钮；
 ![image](https://github.com/chenluda/push-arXiv-paper/assets/45784833/67c8fcf8-93d7-4bc4-8239-0f5139099f82)
 
